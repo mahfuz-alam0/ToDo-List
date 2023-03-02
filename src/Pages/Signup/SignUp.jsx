@@ -23,7 +23,6 @@ const SignUp = () => {
     }
 
     const handleSignUp = (data) => {
-        console.log(data)
         loading_true()
         setSignUPError('');
 
@@ -51,7 +50,7 @@ const SignUp = () => {
 
     const save_user = (userDB) => {
 
-        fetch('http://localhost:5000/users', {
+        fetch('https://task-server-rose.vercel.app/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -104,8 +103,8 @@ const SignUp = () => {
                             {...register("role", { required: "Role is Required" })}
                             defaultValue="select" className="select input-bordered w-full">
                             <option disabled value='select'>Select One....</option>
-                            <option value="admin">As Admin</option>
-                            <option value="clint">As Clint</option>
+                            <option value="0">As Admin</option>
+                            <option value="1">As Clint</option>
                         </select>
                         {errors.role && <p className='text-red-500'>{errors.role.message}</p>}
                     </div>

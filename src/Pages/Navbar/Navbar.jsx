@@ -5,10 +5,16 @@ import useAdmin from '../../Hooks/useAdmin';
 
 const Navbar = () => {
 
-    const { user } = useContext(AuthContext)
+    const { user, logOut } = useContext(AuthContext)
 
     const [isAdmin] = useAdmin(user?.email);
 
+    const handleLogOut = () => { 
+        logOut()
+            .then(() => {
+                localStorage.removeItem('access_token')
+            })
+    }
     
     return (
         <div>
@@ -19,6 +25,7 @@ const Navbar = () => {
                 {
                     isAdmin && <li className='p-3 bg-green-500 rounded-md'><Link to='/home/all-list'>All List</Link></li>
                 }
+                <li className='p-3 bg-green-500 rounded-md'><button onClick={handleLogOut}>LogOut</button></li>
             </ul>
         </div>
     );

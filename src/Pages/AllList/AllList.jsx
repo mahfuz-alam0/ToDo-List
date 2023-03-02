@@ -1,17 +1,21 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../../AuthProvider/AuthProvider';
+import React from 'react';
 
-const View = () => {
+const AllList = () => {
 
-    const [todos, setTodos] = React.useState();
-    const { user } = useContext(AuthContext);
+    const [allList, setAllList] = React.useState();
 
     React.useEffect(() => {
-        fetch(`https://task-server-rose.vercel.app/todo/${user?.email}`)
+        fetch('https://task-server-rose.vercel.app/allList', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('access_token')}`
+            },
+        })
             .then(res => res.json())
-            .then(data => setTodos(data))
-    }, [user])
+            .then(data => setAllList(data))
+    }, [])
+
 
     const handleDelete = (id) => {
         fetch(`https://task-server-rose.vercel.app/todo/${id}`, {
@@ -23,8 +27,8 @@ const View = () => {
         }).then(res => res.json())
             .then(data => {
                 if (data.deletedCount) {
-                    const newTodos = todos.filter(item => item._id !== id);
-                    setTodos(newTodos);
+                    const newTodos = allList.filter(item => item._id !== id);
+                    setAllList(newTodos);
                 }
             })
     }
@@ -46,13 +50,16 @@ const View = () => {
                                 What ToDo
                             </th>
                             <th scope="col" className="bg-white px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                email
+                            </th>
+                            <th scope="col" className="bg-white px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Action
                             </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {
-                            todos?.map(item =>
+                            allList?.map(item =>
                                 <tr key={item._id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
@@ -66,6 +73,9 @@ const View = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm text-gray-900">{item.whattodo}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm text-gray-900">{item.user}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex">
@@ -103,8 +113,8 @@ const View = () => {
                 </table>
 
             </div>
-        </div >
+        </div>
     );
 };
 
-export default View;
+export default AllList;

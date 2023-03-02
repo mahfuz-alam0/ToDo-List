@@ -18,7 +18,7 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const from = location.state?.from?.pathname || '/home';
+    const from = location.state?.from?.pathname || '/home/view';
 
     if (token) {
         navigate(from);

@@ -20,7 +20,6 @@ const Create = () => {
 
     const handlesubmit = (data) => {
 
-        console.log(data)
         setloading(true);
 
         const UpData = {
@@ -30,7 +29,7 @@ const Create = () => {
             user: user.email
         }
 
-        fetch('http://localhost:5000/todo', {
+        fetch('https://task-server-rose.vercel.app/todo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

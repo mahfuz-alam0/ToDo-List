@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../Home/Home";
 import Main from "../Main/Main";
+import AllList from "../Pages/AllList/AllList";
 import Create from "../Pages/Create/Create";
 import Login from "../Pages/Login/Login";
 import SignUp from "../Pages/Signup/SignUp";
@@ -23,6 +24,10 @@ export const router = createBrowserRouter(
             element: <SignUp />
         },
         {
+            path: '/home/detils/:id',
+            element: <Private><AllList/></Private>
+        },
+        {
             path: "/home",
             element: <Main />,
             children: [
@@ -41,6 +46,11 @@ export const router = createBrowserRouter(
                 {
                     path: '/home/update',
                     element: <Private><Update/></Private>
+                },
+                
+                {
+                    path: '/home/all-list',
+                    element: <Private><AllList/></Private>
                 },
             ]
         }
