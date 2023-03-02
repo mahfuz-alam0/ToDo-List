@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
 import './App.css';
 import Home from './Home/Home';
@@ -7,6 +8,7 @@ function App() {
     return (
         <div className="bg-green-200 h-auto">
             <RouterProvider router={router}></RouterProvider>
+            <Toaster/>
         </div>
     );
 }

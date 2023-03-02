@@ -1,53 +1,44 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
+import useToken from '../../Hooks/useToken';
 
 const Login = () => {
 
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const { signIn } = React.useContext(AuthContext);
+    const { signIn, setLoading, loading } = React.useContext(AuthContext);
     const [loginError, setLoginError] = React.useState('');
-    const [loggingIn, setLoggingIn] = React.useState(false);
 
     const [userEmail, setUserEmail] = React.useState(null);
-    // const [token] = useToken(userEmail)
+    const [token] = useToken(userEmail)
 
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const from = location.state?.from?.pathname || '/';
+    const from = location.state?.from?.pathname || '/home';
 
-    // if (token) {
-    //     navigate(from);
-    // }
+    if (token) {
+        navigate(from);
+    }
 
     const handleLogin = (data) => {
-        log_true();
-        console.log(data)
+    
         signIn(data.email, data.password)
             .then(result => {
                 const user = result.user;
                 if (user) {
-                    setemail(user.email);
-                    log_false();
-                    // toast.success('Login Successful')
+                    setUserEmail(user.email);
+                    setLoading(false)
+                    toast.success('Login Successful')
                 }
 
             }).catch(error => {
                 setLoginError(error.message);
-                log_false();
             });
     }
-
-    const setemail = (email) => {
-        setUserEmail(email)
-    }
-
-    const log_true = () => setLoggingIn(true);
-    const log_false = () => setLoggingIn(false);
-
 
 
 
@@ -77,13 +68,13 @@ const Login = () => {
                             <label className="label"> <span className="label-text">Forget Password?</span></label>
                             {errors.password && <p className='text-red-600'>{errors.password?.message}</p>}
                         </div>
-                        <input disabled={loggingIn ? true : false} className='p-3 bg-green-500 rounded-md my-5 w-full cursor-pointer' value="Login" type="submit" />
+                        <input disabled={loading ? true : false} className='p-3 bg-green-500 rounded-md my-5 w-full hover:bg-green-700 hover:text-white duration-300 font-semibold cursor-pointer' value="Login" type="submit" />
                         <div>
                             {loginError && <p className='text-red-600'>{loginError}</p>}
                         </div>
                     </form>
-                    <p>New to Swap Hand ! <Link className='text-primary hover:underline' to="/signup">Create new Account</Link></p>
-                    
+                    <p>Don't have account ! <Link className='text-primary hover:underline' to="/signup">Create new Account</Link></p>
+
                     {/* <SocialLogin /> */}
                 </div>
             </div>

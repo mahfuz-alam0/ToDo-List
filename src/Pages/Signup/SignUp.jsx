@@ -32,9 +32,15 @@ const SignUp = () => {
                 const userInfo = {
                     displayName: data.name
                 }
+                const userDB = {
+                    name: data.name,
+                    email: data.email,
+                    role: data.role,
+                    phone: data.phone
+                }
                 updateUser(userInfo)
                     .then(() => {
-                        // save_user(userDB)
+                        save_user(userDB)
                     })
                     .catch(err => console.log(err));
             })
@@ -43,24 +49,24 @@ const SignUp = () => {
             });
     }
 
-    // const save_user = (userDB) => {
+    const save_user = (userDB) => {
 
-    //     fetch('https://swap-hand-server-hasibul240.vercel.app/users', {
-    //         method: 'POST',
-    //         headers: {
-    //             'content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify(userDB)
-    //     })
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             if (data.acknowledged) {
-    //                 toast.success('Account Created Successfully')
-    //                 set_email_for_token(userDB.email)
-    //                 loading_false()
-    //             }
-    //         })
-    // }
+        fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(userDB)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.acknowledged) {
+                    toast.success('Account Created Successfully')
+                    set_email_for_token(userDB.email)
+                    loading_false()
+                }
+            })
+    }
 
     const set_email_for_token = (email) => {
         setUserEmail(email)
@@ -70,21 +76,38 @@ const SignUp = () => {
     const loading_false = () => setSignInLoading(false);
 
     return (
-        <div className='h-[800px] flex justify-center items-center'>
+        <div className='min-h-screen flex justify-center items-center'>
             <div className='bg-green-100 rounded-xl drop-shadow-md w-96 p-7'>
                 <h2 className='text-3xl text-center'>Sign Up</h2>
                 <form onSubmit={handleSubmit(handleSignUp)}>
                     <div className="form-control w-full ">
                         <label className="label"> <span className="label-text">Name</span></label>
                         <input type="text" {...register("name", { required: "Name is Required" })}
-                            className="p-2 rounded-md bg-green-100 border-2 border-green-700 w-full" />
+                            className="p-2 rounded-md bg-green-100 border-2 border-green-700 w-full mb-4" />
                         {errors.name && <p className='text-red-500'>{errors.name.message}</p>}
                     </div>
                     <div className="form-control w-full ">
                         <label className="label"> <span className="label-text">Email</span></label>
                         <input type="email" {...register("email", { required: true })}
-                            className="p-2 rounded-md bg-green-100 border-2 border-green-700 w-full" />
+                            className="p-2 rounded-md bg-green-100 border-2 border-green-700 w-full mb-4" />
                         {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
+                    </div>
+                    <div className="form-control w-full ">
+                        <label className="label"> <span className="label-text">Phone</span></label>
+                        <input type="text" {...register("phone", { required: true })}
+                            className="p-2 rounded-md bg-green-100 border-2 border-green-700 w-full mb-4" />
+                        {errors.phone && <p className='text-red-500'>{errors.phone.message}</p>}
+                    </div>
+                    <div className="form-control w-full">
+                        <label className="label"> <span className="label-text">SignUp As</span></label>
+                        <select
+                            {...register("role", { required: "Role is Required" })}
+                            defaultValue="select" className="select input-bordered w-full">
+                            <option disabled value='select'>Select One....</option>
+                            <option value="admin">As Admin</option>
+                            <option value="clint">As Clint</option>
+                        </select>
+                        {errors.role && <p className='text-red-500'>{errors.role.message}</p>}
                     </div>
                     <div className="form-control w-full ">
                         <label className="label"> <span className="label-text">Password</span></label>
@@ -99,8 +122,6 @@ const SignUp = () => {
                     {signUpError && <p className='text-red-600'>{signUpError}</p>}
                 </form>
                 <p>Already have an account? <Link className='text-primary hover:underline' to="/login">Please Login</Link></p>
-                <div className="divider">OR</div>
-                
             </div>
         </div>
     );
